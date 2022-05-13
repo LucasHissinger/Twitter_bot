@@ -37,8 +37,8 @@ def create_img():
     fnt1 = ImageFont.truetype(choice(font), 55)
     fnt2 = ImageFont.truetype(choice(font), 55)
 
-    question = read_and_set('questions.txt')
-    answer = read_and_set('response.txt')
+    question = read_and_set('txt/questions.txt')
+    answer = read_and_set('txt/response.txt')
     img = Image.new('RGB', (1920, 1080), color = choice(colors_pastel))
     d = ImageDraw.Draw(img)
     d.text(random_coords(1), question, font=fnt1, fill=choice(colors))

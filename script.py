@@ -17,6 +17,6 @@ url = input('Webpage to grab source from: ')
 req = requests.get(url, 'html.parser')
 soup = BeautifulSoup(req.text, 'html.parser')
 i = 0
-with open('response.txt', 'w') as f:
+with open('test.txt', 'w') as f:
     for p in soup.find_all('p'):
         get_str(p.text, f)

@@ -8,38 +8,26 @@
 import tweepy as tp
 import time
 import datetime
-import os
 from create_img import create_img
-
-def tweet(dt_now):
-    if now.strftime("%H:%M:%S") == "14:00:30":
-        print("TWEET!")
-        create_img()
-        media = api.media_upload("final_img.png")
-        tweet = ""
-        post_result = api.update_status(status=tweet, media_ids=[media.media_id])
-        time.sleep(1)
-
-def reply():
-    print("reply")
-    tweets = api.mentions_timeline(1, tweet_mode = 'extended')
-    for tweet in tweets:
-        #api.update_status(status="@" + tweet.user.screen_name + " " + "Hello I'm a bot in development", in_reply_to_status_id=tweet.id)
-        print(str(tweet.id) + ' - ' + tweet.text)
-
+from methods import *
 
 # credentials to login to twitter api
-consumer_key = 'HgUB4mNQtr3qCfA1UAEAlxGVt'
-consumer_secret = 'jXOeZ5UFOwzcxYo4Uu8qJTxaHfsst0our8DxeXvD61k4WUIbXD'
-access_token = '1524371703564050437-nNHURCpXJEz33rfuInhss4apXYOHZp'
-access_secret = 'XpyKkhsCVXdaA0ypNDolBX72Bo09y3qkyAqbdGd74hvcf'
+consumer_key = 'ajAOTvyerVonmUFftOKaqFBOX'
+consumer_secret = 'lRi5hZxvX3mRCjX2HEdY58PmrSD2YASoUrUNK2ihejvWzfUiUC'
+access_token = '1524371703564050437-Y3TaH9tKvOh93lto0S8VO2eVgBz94c'
+access_secret = 'C8GfyxIDahdHCxClwOCPH641SmqgEUJI3N8YNufN1ZveG'
+url_anime = 'https://fr.wikipedia.org/wiki/'
 
 # login to twitter account api
+print("Starting bot...")
+time.sleep(1)
 auth = tp.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tp.API(auth)
+print("CONNECTED")
 
 while True:
     now = datetime.datetime.now()
-    tweet(now)
+    tweet(api, now)
+    # message_dm(1064939606829920261, "Hello Marjo")
     # reply()
