@@ -12,6 +12,7 @@ from create_img import create_img
 def read_last_id():
     file = open("txt/last_id.txt", "r")
     last_id = int(file.read().strip())
+    file.close()
     return last_id
 
 def store_last_id(last_id):
@@ -30,11 +31,13 @@ def tweet(api, dt_now):
         time.sleep(1)
 
 def reply(api):
-    print("reply")
-    tweets = api.mentions_timeline(1, tweet_mode = 'extended')
+    #tweets = api.mentions_timeline(read_last_id(), tweet_mode = 'extended')
+    tweets = api.mentions_timeline()
+    # for tweet in reversed(tweets):
     for tweet in tweets:
-        #api.update_status(status="@" + tweet.user.screen_name + " " + "Hello I'm a bot in development", in_reply_to_status_id=tweet.id)
-        print(str(tweet.id) + ' - ' + tweet.text)
+        if '#bot' in tweet.text.lower():
+            print(str(tweet.id) + " - " + tweet.text)
+        #store_last_id(tweet.id)
 
 def message_dm(api, id_user, message):
     api.send_direct_message(id_user, message)
