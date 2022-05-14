@@ -31,8 +31,7 @@ api = tp.API(auth)
 print("CONNECTED")
 
 while True:
-    #now = datetime.datetime.now()
-    #tweet(api, now)
-    # message_dm(1064939606829920261, "Hello Marjo")
+    now = datetime.datetime.now()
+    tweet(api, now)
     reply(api)
     time.sleep(2)
