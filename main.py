@@ -6,16 +6,20 @@
 ##
 
 import tweepy as tp
+import os
 import time
 import datetime
+from dotenv import load_dotenv
 from create_img import create_img
 from methods import *
 
+load_dotenv()
+
 # credentials to login to twitter api
-consumer_key = 'ajAOTvyerVonmUFftOKaqFBOX'
-consumer_secret = 'lRi5hZxvX3mRCjX2HEdY58PmrSD2YASoUrUNK2ihejvWzfUiUC'
-access_token = '1524371703564050437-Y3TaH9tKvOh93lto0S8VO2eVgBz94c'
-access_secret = 'C8GfyxIDahdHCxClwOCPH641SmqgEUJI3N8YNufN1ZveG'
+consumer_key = os.getenv('CONSUMER_KEY')
+consumer_secret = os.getenv('CONSUMER_SECRET')
+access_token = os.getenv('ACCESS_TOKEN')
+access_secret = os.getenv('ACCESS_SECRET')
 url_anime = 'https://fr.wikipedia.org/wiki/'
 
 # login to twitter account api
