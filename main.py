@@ -34,4 +34,3 @@ while True:
     now = datetime.datetime.now()
     tweet(api, now)
     reply(api)
-    time.sleep(2)

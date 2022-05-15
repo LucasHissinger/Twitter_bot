@@ -9,14 +9,13 @@ import requests
 from bs4 import BeautifulSoup
 
 def get_str(str, f):
-    print(str.rstrip("\n"))
     f.write(str)
 
 url = input('Webpage to grab source from: ')
+file_name = input('name of the file : ')
 
 req = requests.get(url, 'html.parser')
 soup = BeautifulSoup(req.text, 'html.parser')
-i = 0
-with open('test.txt', 'w') as f:
+with open(file_name, 'w') as f:
     for p in soup.find_all('p'):
         get_str(p.text, f)
