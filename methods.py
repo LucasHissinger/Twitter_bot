@@ -9,6 +9,7 @@ import time
 import tweepy as tp
 from create_img import create_img, read_and_set
 import requests
+import csv
 
 def read_last_id():
     file = open("txt/last_seen.txt", "r")
@@ -80,9 +81,24 @@ def show_help(api, tweet):
         response = "@" + tweet.user.screen_name + " Check your DM now ! :D"
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
 
+def get_city(string):
+
+    file = open("txt/cities.csv", "r")
+    data = csv.reader(file, delimiter=',')
+    names = []
+    for row in data:
+        names.append(row[0])
+    for name in names:
+        if name in string:
+            return name
+    return "84"
+
 def get_meteo(api, tweet):
     if '#meteo' in tweet.text.lower():
-        ville = "Lyon"
+        ville = get_city(tweet.text)
+        if ville == "84":
+            api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(", in_reply_to_status_id=tweet.id)
+            return;
         url_weather = "http://api.openweathermap.org/data/2.5/weather?q="+ville+"&APPID=beb97c1ce62559bba4e81e28de8be095"
         r_weather = requests.get(url_weather)
         data = r_weather.json()
@@ -96,4 +112,5 @@ def get_meteo(api, tweet):
         message += "\nLe taux d'humidite est de " + str(humidite) + "%"
         temps = data['weather'][0]['description']
         message += "\nConditions climatiques : " + str(temps)
+        api.update_status(status="@" + tweet.user.screen_name + " " + message, in_reply_to_status_id=tweet.id)
         time.sleep(1)
