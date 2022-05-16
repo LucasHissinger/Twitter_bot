@@ -10,6 +10,7 @@ import tweepy as tp
 from create_img import create_img, read_and_set
 import requests
 import csv
+import os
 
 def read_last_id():
     file = open("txt/last_seen.txt", "r")
@@ -99,7 +100,7 @@ def get_meteo(api, tweet):
         if ville == "84":
             api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(", in_reply_to_status_id=tweet.id)
             return;
-        url_weather = "http://api.openweathermap.org/data/2.5/weather?q="+ville+"&APPID=beb97c1ce62559bba4e81e28de8be095"
+        url_weather = os.getenv('URL_METEO_API')
         r_weather = requests.get(url_weather)
         data = r_weather.json()
         message = "Vous etes a " + ville
