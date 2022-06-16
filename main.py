@@ -22,7 +22,7 @@ access_token = os.getenv('ACCESS_TOKEN')
 access_secret = os.getenv('ACCESS_SECRET')
 url_anime = 'https://fr.wikipedia.org/wiki/'
 
-# login to twitter account api
+#login to twitter account api
 print("Starting bot...")
 time.sleep(1)
 auth = tp.OAuthHandler(consumer_key, consumer_secret)

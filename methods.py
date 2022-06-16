@@ -8,7 +8,9 @@
 import time
 import tweepy as tp
 from create_img import create_img, read_and_set
+from anime import *
 import requests
+import json
 import csv
 import os
 
@@ -50,9 +52,16 @@ def coiffeur(api, tweet):
         response = response = "@" + tweet.user.screen_name + " Je pense que feur"
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
 
+def anime(api, tweet):
+    if '#anime' in tweet.text.lower():
+        anime_main(tweet.text)
+        media = api.media_upload("anime_syn.png")
+        api.update_status(status="@" + tweet.user.screen_name + " for more info : ", in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
+
+
 def reply(api):
     tweets = api.mentions_timeline(count=1)
-    time.sleep(3)
+    time.sleep(5)
     for tweet in (tweets):
         print("tweet : " + tweet.text + " by : " + tweet.user.screen_name)
         if (read_last_id() != tweet.id):
@@ -61,6 +70,7 @@ def reply(api):
             message_dm(api, tweet)
             show_help(api, tweet)
             get_meteo(api, tweet)
+            anime(api, tweet)
             api.create_favorite(tweet.id)
             store_last_id(tweet.id)
 
@@ -98,9 +108,9 @@ def get_meteo(api, tweet):
     if '#meteo' in tweet.text.lower():
         ville = get_city(tweet.text)
         if ville == "84":
-            api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(", in_reply_to_status_id=tweet.id)
+            api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(\n Vous êtes sûr de l'orthographe ?", in_reply_to_status_id=tweet.id)
             return;
-        url_weather = os.getenv('URL_METEO_API')
+        url_weather = os.getenv('URL_METEO') + ville + os.getenv('API_METEO')
         r_weather = requests.get(url_weather)
         data = r_weather.json()
         message = "Vous etes a " + ville
