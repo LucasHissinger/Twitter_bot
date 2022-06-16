@@ -46,6 +46,7 @@ def click_on_link(links):
     driver.get(link)
     sleep(3)
     get_screen(driver)
+    return link
 
 def search_anime(choice):
     choice += ' wkiipedia'
@@ -53,7 +54,7 @@ def search_anime(choice):
     for j in search(choice):
         links.append(j)
     print(links)
-    click_on_link(links)
+    return click_on_link(links)
 
 def parsing(string):
     string = list(string)
@@ -82,4 +83,4 @@ def anime_main(choice):
         print("Anime non trouvé")
         exit()
     else:
-        search_anime(new)
+        return search_anime(new)

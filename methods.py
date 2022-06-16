@@ -54,9 +54,9 @@ def coiffeur(api, tweet):
 
 def anime(api, tweet):
     if '#anime' in tweet.text.lower():
-        anime_main(tweet.text)
+        link = anime_main(tweet.text)
         media = api.media_upload("anime_syn.png")
-        api.update_status(status="@" + tweet.user.screen_name + " for more info : ", in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
+        api.update_status(status="@" + tweet.user.screen_name + " for more info : " + link, in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
 
 
 def reply(api):
