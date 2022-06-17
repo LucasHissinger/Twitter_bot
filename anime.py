@@ -59,7 +59,6 @@ def search_anime(choice):
 def parsing(string):
     string = list(string)
     new = ""
-    print(string)
     state = 0
     for char in string:
         if char == '#' or char == '@':
@@ -68,7 +67,6 @@ def parsing(string):
             new += char
         if char == ' ':
             state = 0
-        print(state, char)
     return new
 
 def anime_main(choice):
@@ -81,6 +79,6 @@ def anime_main(choice):
     anime = get_anime(new)
     if anime == False:
         print("Anime non trouvé")
-        exit()
+        return "$ERROR$"
     else:
         return search_anime(new)

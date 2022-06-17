@@ -55,6 +55,9 @@ def coiffeur(api, tweet):
 def anime(api, tweet):
     if '#anime' in tweet.text.lower():
         link = anime_main(tweet.text)
+        if link == "$ERROR$":
+            api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cet animé :(\n N'hesitez pas a m'en faire part dans mes DM", in_reply_to_status_id=tweet.id)
+            return;
         media = api.media_upload("anime_syn.png")
         api.update_status(status="@" + tweet.user.screen_name + " for more info : " + link, in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
 
