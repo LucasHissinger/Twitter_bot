@@ -5,12 +5,10 @@
 ## test
 ##
 
-from ntpath import join
 from selenium import webdriver
 from time import sleep
 from googlesearch import search
 import csv
-import wget
 
 def get_anime(title):
 

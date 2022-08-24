@@ -1,6 +1,6 @@
 ##
 ## PERSONAL PROJECT
-## bot
+## bot twitter
 ## File description:
 ## main
 ##
@@ -10,7 +10,6 @@ import os
 import time
 import datetime
 from dotenv import load_dotenv
-from create_img import create_img
 from methods import *
 
 load_dotenv()

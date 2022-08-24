@@ -6,13 +6,12 @@
 ##
 
 import time
-import tweepy as tp
 from create_img import create_img, read_and_set
 from anime import *
 import requests
-import json
 import csv
 import os
+import wget
 
 def read_last_id():
     file = open("../txt/last_seen.txt", "r")
