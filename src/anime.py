@@ -12,7 +12,7 @@ import csv
 
 def get_anime(title):
 
-    file = open("../txt/animes.csv", "r")
+    file = open("../txt/animes.csv", "r", encoding="utf-8")
     data = csv.reader(file, delimiter=',')
     names = []
     for row in data:
@@ -26,7 +26,7 @@ def get_screen(driver):
     driver.get_screenshot_as_file("anime_syn.png")
 
 def click_on_link(links):
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(executable_path=r'C:/Users/lucas/Documents/work/Twitter_bot/chromedriver.exe')
     link = ""
     for url in links:
         if '.wikipedia' in url:
@@ -52,7 +52,6 @@ def search_anime(choice):
     links = []
     for j in search(choice):
         links.append(j)
-    print(links)
     return click_on_link(links)
 
 def parsing(string):

@@ -12,6 +12,7 @@ import requests
 import csv
 import os
 import wget
+from googletrans import Translator
 
 def read_last_id():
     file = open("../txt/last_seen.txt", "r")
@@ -60,15 +61,7 @@ def anime(api, tweet):
             return;
         media = api.media_upload("anime_syn.png")
         api.update_status(status="@" + tweet.user.screen_name + " for more info : " + link, in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
-
-def download_video(api, tweet):
-    infos = tweet.entities.get('media', [])
-    print(infos)
-    if infos != []:
-        url = infos[0]['media_url']
-        print("url : " + url)
-        wget.download(url, "../media/video.mp4")
-        # api.update_status(status="@" + tweet.user.screen_name + " " + url, in_reply_to_status_id=tweet.id)
+        os.remove("anime_syn.png")
 
 def reply(api):
     tweets = api.mentions_timeline(count=1)
@@ -82,8 +75,7 @@ def reply(api):
             show_help(api, tweet)
             get_meteo(api, tweet)
             anime(api, tweet)
-            download_video(api, tweet)
-            # api.create_favorite(tweet.id)
+            api.create_favorite(tweet.id)
             store_last_id(tweet.id)
 
 def message_dm(api, tweet):
@@ -97,7 +89,7 @@ def show_help(api, tweet):
     if '#help' in tweet.text.lower():
         print("help !")
         message = ""
-        with open("../txt/help.txt") as f:
+        with open("../txt/help.txt", encoding='utf-8') as f:
             message = f.read()
         f.close()
         api.send_direct_message(tweet.user.id, message)
@@ -105,15 +97,11 @@ def show_help(api, tweet):
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
 
 def get_city(string):
-
-    file = open("../txt/cities.csv", "r")
+    file = open("../txt/cities.csv", "r", encoding="utf-8")
     data = csv.reader(file, delimiter=',')
-    names = []
     for row in data:
-        names.append(row[0])
-    for name in names:
-        if name in string:
-            return name
+        if row[0] in string:
+            return row[0]
     return "84"
 
 def get_meteo(api, tweet):
@@ -134,6 +122,6 @@ def get_meteo(api, tweet):
         humidite = data['main']['humidity']
         message += "\nLe taux d'humidite est de " + str(humidite) + "%"
         temps = data['weather'][0]['description']
-        message += "\nConditions climatiques : " + str(temps)
+        message += "\nConditions climatiques : " +  Translator().translate(str(temps), dest='fr').text
         api.update_status(status="@" + tweet.user.screen_name + " " + message, in_reply_to_status_id=tweet.id)
         time.sleep(1)

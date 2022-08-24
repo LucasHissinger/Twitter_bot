@@ -11,7 +11,7 @@ from os import remove
 
 def read_and_set(filename):
     lines = []
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         lines = f.readlines()
     f.close()
     return choice(lines).rstrip("\n")
