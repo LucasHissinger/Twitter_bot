@@ -1,3 +1,4 @@
 .env
 __pycache__
 txt/things_to_do
+chromedriver.exe

@@ -6,5 +6,4 @@ Keyword :
 - "#dm" to send a direct message to you
 - "#help" to show this help message
 - "#meteo" to show the meteo
-- "#dl" to downloadl the video i'm tagged with
 - "#anime" to show a short synopsis of the anime tag in your tweet
