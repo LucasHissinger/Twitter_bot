@@ -75,7 +75,10 @@ def reply(api):
             show_help(api, tweet)
             get_meteo(api, tweet)
             anime(api, tweet)
-            api.create_favorite(tweet.id)
+            try:
+                api.create_favorite(tweet.id)
+            except Exception as e:
+                pass
             store_last_id(tweet.id)
 
 def message_dm(api, tweet):
