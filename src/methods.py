@@ -13,6 +13,9 @@ import csv
 import os
 import wget
 from googletrans import Translator
+import datetime
+
+now = datetime.datetime.now()
 
 def read_last_id():
     file = open("../txt/last_seen.txt", "r")
@@ -26,12 +29,12 @@ def store_last_id(last_id):
         file.close()
         return;
 
-def tweet(api, dt_now):
+def tweet(api, dt_now, output):
     tweet = 0
     if dt_now.strftime("%H:%M:%S") == "15:19:10":
         tweet = 1
     if tweet == 1:
-        print("TWEET!")
+        output.write(str(datetime.datetime.now()) + " TWEET!\n")
         create_img()
         media = api.media_upload("final_img.png")
         tweet = "Daily post"
@@ -39,7 +42,7 @@ def tweet(api, dt_now):
         tweet = 0
         os.remove("final_img.png")
 
-def coiffeur(api, tweet):
+def coiffeur(api, tweet, output):
     str = tweet.text[::-1]
     tmp = ""
     for i in range(len(str)):
@@ -52,9 +55,11 @@ def coiffeur(api, tweet):
     elif 'quoi' in tweet.text.lower():
         response = response = "@" + tweet.user.screen_name + " Je pense que feur"
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
+    output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
 
-def anime(api, tweet):
+def anime(api, tweet, output):
     if '#anime' in tweet.text.lower():
+        output.write(str(datetime.datetime.now()) + " anime reply\n")
         link = anime_main(tweet.text)
         if link == "$ERROR$":
             api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cet animé :(\n N'hesitez pas a m'en faire part dans mes DM", in_reply_to_status_id=tweet.id)
@@ -63,34 +68,34 @@ def anime(api, tweet):
         api.update_status(status="@" + tweet.user.screen_name + " for more info : " + link, in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
         os.remove("anime_syn.png")
 
-def reply(api):
+def reply(api, output):
     tweets = api.mentions_timeline(count=1)
     time.sleep(5)
     for tweet in (tweets):
-        print("tweet : " + tweet.text + " by : " + tweet.user.screen_name)
+        output.write(str(datetime.datetime.now()) + " tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
         if (read_last_id() != tweet.id):
-            print("reply !")
-            coiffeur(api, tweet)
-            message_dm(api, tweet)
-            show_help(api, tweet)
-            get_meteo(api, tweet)
-            anime(api, tweet)
+            output.write(str(datetime.datetime.now()) + " reply !\n")
+            coiffeur(api, tweet, output)
+            message_dm(api, tweet, output)
+            show_help(api, tweet, output)
+            get_meteo(api, tweet, output)
+            anime(api, tweet, output)
             try:
                 api.create_favorite(tweet.id)
             except Exception as e:
                 pass
             store_last_id(tweet.id)
 
-def message_dm(api, tweet):
+def message_dm(api, tweet, output):
     if '#dm' in tweet.text.lower():
-        print("DM !")
+        output.write(str(datetime.datetime.now()) + " DM !\n")
         message = read_and_set('../txt/citations_life.txt')
         message += "\nby : me :)"
         api.send_direct_message(tweet.user.id, message)
 
-def show_help(api, tweet):
+def show_help(api, tweet, output):
     if '#help' in tweet.text.lower():
-        print("help !")
+        output.write(str(datetime.datetime.now()) + " help !\n")
         message = ""
         with open("../txt/help.txt", encoding='utf-8') as f:
             message = f.read()
@@ -107,8 +112,9 @@ def get_city(string):
             return row[0]
     return "84"
 
-def get_meteo(api, tweet):
+def get_meteo(api, tweet, output):
     if '#meteo' in tweet.text.lower():
+        output.write(str(datetime.datetime.now()) + "reply get_meteo\n")
         ville = get_city(tweet.text)
         if ville == "84":
             api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(\n Vous êtes sûr de l'orthographe ?", in_reply_to_status_id=tweet.id)

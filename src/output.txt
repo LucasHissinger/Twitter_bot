@@ -1,0 +1,4 @@
+2022-09-04 19:50:16.656317 Starting bot...
+2022-09-04 19:50:16.656317 CONNECTED
+2022-09-04 19:50:22.916660 tweet : @WonderfullBot je t'aime by : ImMarjoO
+2022-09-04 19:50:28.157431 tweet : @WonderfullBot je t'aime by : ImMarjoO
