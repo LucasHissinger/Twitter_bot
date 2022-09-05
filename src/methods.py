@@ -43,11 +43,11 @@ def tweet(api, dt_now, output):
         os.remove("final_img.png")
 
 def coiffeur(api, tweet, output):
-    str = tweet.text[::-1]
+    string = tweet.text[::-1]
     tmp = ""
-    for i in range(len(str)):
-        if str[i].isalpha():
-            tmp += str[i]
+    for i in range(len(string)):
+        if string[i].isalpha():
+            tmp += string[i]
         if len(tmp) == 4: break
     if tmp[::-1].lower() == 'quoi':
         response = response = "@" + tweet.user.screen_name + " Feur"
@@ -70,7 +70,7 @@ def anime(api, tweet, output):
 
 def reply(api, output):
     tweets = api.mentions_timeline(count=1)
-    time.sleep(5)
+    time.sleep(13)
     for tweet in (tweets):
         output.write(str(datetime.datetime.now()) + " tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
         if (read_last_id() != tweet.id):
@@ -133,4 +133,3 @@ def get_meteo(api, tweet, output):
         temps = data['weather'][0]['description']
         message += "\nConditions climatiques : " +  Translator().translate(str(temps), dest='fr').text
         api.update_status(status="@" + tweet.user.screen_name + " " + message, in_reply_to_status_id=tweet.id)
-        time.sleep(1)

@@ -28,8 +28,11 @@ auth = tp.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tp.API(auth)
 output.write(str(now) + " CONNECTED\n")
+output.close()
 
 while True:
+    output = open("output.txt", 'a')
     now = datetime.datetime.now()
     tweet(api, now, output)
     reply(api, output)
+    output.close()
