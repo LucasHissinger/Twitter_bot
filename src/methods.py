@@ -69,22 +69,22 @@ def anime(api, tweet, output):
         os.remove("anime_syn.png")
 
 def reply(api, output):
-    tweets = api.mentions_timeline(count=1)
+    tweets = api.mentions_timeline(count=10)
     time.sleep(13)
     for tweet in (tweets):
         output.write(str(datetime.datetime.now()) + " tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
-        if (read_last_id() != tweet.id):
-            output.write(str(datetime.datetime.now()) + " reply !\n")
-            coiffeur(api, tweet, output)
-            message_dm(api, tweet, output)
-            show_help(api, tweet, output)
-            get_meteo(api, tweet, output)
-            anime(api, tweet, output)
-            try:
-                api.create_favorite(tweet.id)
-            except Exception as e:
-                pass
-            store_last_id(tweet.id)
+        # if (read_last_id() != tweet.id):
+        #     output.write(str(datetime.datetime.now()) + " reply !\n")
+        #     coiffeur(api, tweet, output)
+        #     message_dm(api, tweet, output)
+        #     show_help(api, tweet, output)
+        #     get_meteo(api, tweet, output)
+        #     anime(api, tweet, output)
+        #     try:
+        #         api.create_favorite(tweet.id)
+        #     except Exception as e:
+        #         pass
+        #     store_last_id(tweet.id)
 
 def message_dm(api, tweet, output):
     if '#dm' in tweet.text.lower():
