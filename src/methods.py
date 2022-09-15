@@ -17,21 +17,19 @@ import datetime
 
 now = datetime.datetime.now()
 
-def read_last_id():
+def read_last_id(line):
     file = open("../txt/last_seen.txt", "r")
-    last_id = int(file.read().strip())
+    content = file.readlines()
     file.close()
-    return last_id
+    return content[line].replace("\n","")
 
-def store_last_id(last_id):
-        file = open("../txt/last_seen.txt", "w")
-        file.write(str(last_id))
-        file.close()
-        return;
+def store_last_id(last_id, file):
+    file.write(str(last_id) + "\n")
+    return;
 
 def tweet(api, dt_now, output):
     tweet = 0
-    if dt_now.strftime("%H:%M:%S") == "15:19:10":
+    if dt_now.strftime("%H:%M:%S") >= "15:00:00" and dt_now.strftime("%H:%M:%S") <= "15:00:20":
         tweet = 1
     if tweet == 1:
         output.write(str(datetime.datetime.now()) + " TWEET!\n")
@@ -50,12 +48,13 @@ def coiffeur(api, tweet, output):
             tmp += string[i]
         if len(tmp) == 4: break
     if tmp[::-1].lower() == 'quoi':
+        output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
         response = response = "@" + tweet.user.screen_name + " Feur"
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
     elif 'quoi' in tweet.text.lower():
         response = response = "@" + tweet.user.screen_name + " Je pense que feur"
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
-    output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
+        output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
 
 def anime(api, tweet, output):
     if '#anime' in tweet.text.lower():
@@ -69,33 +68,45 @@ def anime(api, tweet, output):
         os.remove("anime_syn.png")
 
 def reply(api, output):
-    tweets = api.mentions_timeline(count=10)
+    num_tweet = 0
+    tweets = api.mentions_timeline(count=5)
+    with open("../txt/last_seen.txt", "r") as f:
+        content = f.readlines()
+    tmp = open("../txt/tmp.txt", "a")
     time.sleep(13)
+    print("loop")
     for tweet in (tweets):
-        output.write(str(datetime.datetime.now()) + " tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
-        # if (read_last_id() != tweet.id):
-        #     output.write(str(datetime.datetime.now()) + " reply !\n")
-        #     coiffeur(api, tweet, output)
-        #     message_dm(api, tweet, output)
-        #     show_help(api, tweet, output)
-        #     get_meteo(api, tweet, output)
-        #     anime(api, tweet, output)
-        #     try:
-        #         api.create_favorite(tweet.id)
-        #     except Exception as e:
-        #         pass
-        #     store_last_id(tweet.id)
+        id = read_last_id(num_tweet)
+        if str(tweet.id) + "\n" in content:
+            store_last_id(tweet.id, tmp)
+        elif (id != str(tweet.id)):
+            output.write(str(datetime.datetime.now()) + " new tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
+            # coiffeur(api, tweet, output)
+            # message_dm(api, tweet, output)
+            # show_help(api, tweet, output)
+            # get_meteo(api, tweet, output)
+            # anime(api, tweet, output)
+            # try:
+            #     api.create_favorite(tweet.id)
+            #     print("liked")
+            # except Exception as e:
+            #     pass
+            store_last_id(tweet.id, tmp)
+        num_tweet += 1
+    tmp.close()
+    os.remove("../txt/last_seen.txt")
+    os.rename("../txt/tmp.txt", "../txt/last_seen.txt")
 
 def message_dm(api, tweet, output):
     if '#dm' in tweet.text.lower():
-        output.write(str(datetime.datetime.now()) + " DM !\n")
+        output.write(str(datetime.datetime.now()) + " DM reply !\n")
         message = read_and_set('../txt/citations_life.txt')
         message += "\nby : me :)"
         api.send_direct_message(tweet.user.id, message)
 
 def show_help(api, tweet, output):
     if '#help' in tweet.text.lower():
-        output.write(str(datetime.datetime.now()) + " help !\n")
+        output.write(str(datetime.datetime.now()) + " help reply !\n")
         message = ""
         with open("../txt/help.txt", encoding='utf-8') as f:
             message = f.read()
@@ -114,7 +125,7 @@ def get_city(string):
 
 def get_meteo(api, tweet, output):
     if '#meteo' in tweet.text.lower():
-        output.write(str(datetime.datetime.now()) + "reply get_meteo\n")
+        output.write(str(datetime.datetime.now()) + " meteo reply\n")
         ville = get_city(tweet.text)
         if ville == "84":
             api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(\n Vous êtes sûr de l'orthographe ?", in_reply_to_status_id=tweet.id)

@@ -35,7 +35,7 @@ while True:
     output = open("output.txt", 'a')
     now = datetime.datetime.now()
     try:
-        tweet(api, now, output)
+        # tweet(api, now, output)
         reply(api, output)
     except tp.errors.TooManyRequests:
         output.write(str(now) + " Too many requests\n")
