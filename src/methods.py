@@ -69,7 +69,7 @@ def anime(api, tweet, output):
 
 def reply(api, output):
     num_tweet = 0
-    tweets = api.mentions_timeline(count=5)
+    tweets = api.mentions_timeline(count=10)
     with open("../txt/last_seen.txt", "r") as f:
         content = f.readlines()
     tmp = open("../txt/tmp.txt", "a")
@@ -81,11 +81,11 @@ def reply(api, output):
             store_last_id(tweet.id, tmp)
         elif (id != str(tweet.id)):
             output.write(str(datetime.datetime.now()) + " new tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
-            # coiffeur(api, tweet, output)
             # message_dm(api, tweet, output)
-            # show_help(api, tweet, output)
             # get_meteo(api, tweet, output)
             # anime(api, tweet, output)
+            # show_help(api, tweet, output)
+            # coiffeur(api, tweet, output)
             # try:
             #     api.create_favorite(tweet.id)
             #     print("liked")
