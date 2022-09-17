@@ -31,12 +31,14 @@ api = tp.API(auth)
 output.write(str(datetime.datetime.now()) + " CONNECTED\n")
 output.close()
 
+bot = Twitter_bot(api)
+
 while True:
     output = open("output.txt", 'a')
     now = datetime.datetime.now()
     try:
-        tweet(api, now, output)
-        reply(api, output)
+        bot.tweet(output, now)
+        bot.reply(output)
     except tp.errors.TooManyRequests:
         output.write(str(now) + " Too many requests\n")
         print("Limit request reached, waiting 15 minutes")
