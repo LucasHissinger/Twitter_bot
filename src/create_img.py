@@ -47,7 +47,7 @@ def create_img():
 
     Image1 = Image.open('base_img.png')
     Image1copy = Image1.copy()
-    Image2 = Image.open('pic/' + str(randint(1,6)) + '.png')
+    Image2 = Image.open('../pic/' + str(randint(1,6)) + '.png')
     Image2copy = Image2.copy()
     Image1copy.paste(Image2copy, (randint(0, 1500), randint(200, 800)))
     Image1copy.save('final_img.png') # save the image

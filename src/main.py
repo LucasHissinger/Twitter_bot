@@ -23,12 +23,12 @@ access_secret = os.getenv('ACCESS_SECRET')
 print("starting bot")
 #login to twitter account api
 output = open("output.txt", 'w')
-output.write(str(now) + " Starting bot...\n")
+output.write(str(datetime.datetime.now()) + " Starting bot...\n")
 time.sleep(1)
 auth = tp.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tp.API(auth)
-output.write(str(now) + " CONNECTED\n")
+output.write(str(datetime.datetime.now()) + " CONNECTED\n")
 output.close()
 
 while True:

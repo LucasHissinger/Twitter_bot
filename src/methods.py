@@ -7,6 +7,7 @@
 
 import time
 from create_img import create_img, read_and_set
+from utils import *
 from anime import *
 import requests
 import csv
@@ -15,29 +16,13 @@ import wget
 from googletrans import Translator
 import datetime
 
-now = datetime.datetime.now()
-
-def read_last_id(line):
-    file = open("../txt/last_seen.txt", "r")
-    content = file.readlines()
-    file.close()
-    return content[line].replace("\n","")
-
-def store_last_id(last_id, file):
-    file.write(str(last_id) + "\n")
-    return;
-
 def tweet(api, dt_now, output):
-    tweet = 0
-    if dt_now.strftime("%H:%M:%S") >= "15:00:00" and dt_now.strftime("%H:%M:%S") <= "15:00:20":
-        tweet = 1
-    if tweet == 1:
+    if dt_now.strftime("%H:%M:%S") >= "15:04:00" and dt_now.strftime("%H:%M:%S") <= "15:04:14":
         output.write(str(datetime.datetime.now()) + " TWEET!\n")
         create_img()
         media = api.media_upload("final_img.png")
         tweet = "Daily post"
         api.update_status(status=tweet, media_ids=[media.media_id])
-        tweet = 0
         os.remove("final_img.png")
 
 def coiffeur(api, tweet, output):
@@ -74,7 +59,7 @@ def reply(api, output):
         content = f.readlines()
     tmp = open("../txt/tmp.txt", "a")
     time.sleep(13)
-    print("loop")
+    output.write(25*"=" + " " + str(datetime.datetime.now()) + " " + 25*"=" + "\n")
     for tweet in (tweets):
         id = read_last_id(num_tweet)
         if str(tweet.id) + "\n" in content:
@@ -114,14 +99,6 @@ def show_help(api, tweet, output):
         api.send_direct_message(tweet.user.id, message)
         response = "@" + tweet.user.screen_name + " Check your DM now ! :D"
         api.update_status(status=response, in_reply_to_status_id=tweet.id)
-
-def get_city(string):
-    file = open("../txt/cities.csv", "r", encoding="utf-8")
-    data = csv.reader(file, delimiter=',')
-    for row in data:
-        if row[0] in string:
-            return row[0]
-    return "84"
 
 def get_meteo(api, tweet, output):
     if '#meteo' in tweet.text.lower():
