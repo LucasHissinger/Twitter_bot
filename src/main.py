@@ -20,7 +20,6 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 access_token = os.getenv('ACCESS_TOKEN')
 access_secret = os.getenv('ACCESS_SECRET')
 
-print("starting bot")
 #login to twitter account api
 output = open("output.txt", 'w')
 output.write(str(datetime.datetime.now()) + " Starting bot...\n")
@@ -35,28 +34,27 @@ output.close()
 
 while True:
     bot.status = "online"
-    output = open("output.txt", 'a', encoding="utf-8")
-    now = datetime.datetime.now()
+    bot.output = open("output.txt", 'a', encoding="utf-8")
+    bot.dt_now = datetime.datetime.now()
     try:
-        bot.tweet(output, now)
-        bot.get_trends_and_retweets(now, output)
-        bot.reply(output)
+        bot.tweet()
+        bot.get_trends_and_retweets()
+        bot.reply()
     except tp.errors.TooManyRequests:
-        output.write(str(now) + " Too many requests\n")
-        print("Limit request reached, waiting 15 minutes")
+        bot.output.write(str(bot.dt_now) + " Too many requests\n")
         bot.status = "offline"
         time.sleep(900)
     except KeyboardInterrupt:
-        output.write("exiting safe")
-        output.close()
+        bot.output.write("exiting safe")
+        bot.output.close()
         exit(0)
     except tp.errors.TweepyException:
         bot.status = "offline"
-        output.write("Connection closed, bot status :" + bot.status + "\n")
-        output.close()
+        bot.output.write("Connection closed, bot status :" + bot.status + "\n")
+        bot.output.close()
         time.sleep(60)
-        output = open("output.txt", 'a', encoding="utf-8")
+        bot.output = open("output.txt", 'a', encoding="utf-8")
         bot.status = "online"
-        output.write("Connection re-established, bot status :" + bot.status + "\n")
-        output.close()
-    output.close()
+        bot.output.write("Connection re-established, bot status :" + bot.status + "\n")
+        bot.output.close()
+    bot.output.close()

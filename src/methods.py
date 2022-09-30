@@ -5,6 +5,7 @@
 ## methods
 ##
 
+from doctest import OutputChecker
 from secrets import choice
 import random
 import time
@@ -19,6 +20,10 @@ from googletrans import Translator
 import datetime
 
 class Twitter_bot:
+
+    global output
+    global dt_now
+
     def __init__(self, api, status):
         self.api = api
         self.status = status
@@ -26,16 +31,16 @@ class Twitter_bot:
     def __repr__(self) -> str:
         return f"Twitter_bot({self.api}) and status : {self.status}"
 
-    def tweet(self, output, dt_now):
-        if dt_now.strftime("%H:%M:%S") >= "15:30:00" and dt_now.strftime("%H:%M:%S") <= "15:30:14":
-            output.write(str(datetime.datetime.now()) + " TWEET!\n")
+    def tweet(self):
+        if self.dt_now.strftime("%H:%M:%S") >= "15:30:00" and self.dt_now.strftime("%H:%M:%S") <= "15:30:14":
+            self.output.write(str(datetime.datetime.now()) + " TWEET!\n")
             create_img()
             media = self.api.media_upload("final_img.png")
             tweet = "Daily post"
             self.api.update_status(status=tweet, media_ids=[media.media_id])
             os.remove("final_img.png")
 
-    def coiffeur(self, tweet, output):
+    def coiffeur(self, tweet):
         string = tweet.text[::-1]
         tmp = ""
         for i in range(len(string)):
@@ -43,17 +48,17 @@ class Twitter_bot:
                 tmp += string[i]
             if len(tmp) == 4: break
         if tmp[::-1].lower() == 'quoi':
-            output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
+            self.output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
             response = response = "@" + tweet.user.screen_name + " Feur"
             self.api.update_status(status=response, in_reply_to_status_id=tweet.id)
         elif 'quoi' in tweet.text.lower():
             response = response = "@" + tweet.user.screen_name + " Je pense que feur"
             self.api.update_status(status=response, in_reply_to_status_id=tweet.id)
-            output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
+            self.output.write(str(datetime.datetime.now()) + " coiffeur reply\n")
 
-    def anime(self, tweet, output):
+    def anime(self, tweet):
         if '#anime' in tweet.text.lower():
-            output.write(str(datetime.datetime.now()) + " anime reply\n")
+            self.output.write(str(datetime.datetime.now()) + " anime reply\n")
             link = anime_main(tweet.text)
             if link == "$ERROR$":
                 self.api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cet animé :(\n N'hesitez pas a m'en faire part dans mes DM", in_reply_to_status_id=tweet.id)
@@ -62,16 +67,16 @@ class Twitter_bot:
             self.api.update_status(status="@" + tweet.user.screen_name + " for more info : " + link, in_reply_to_status_id=tweet.id, media_ids=[media.media_id])
             os.remove("anime_syn.png")
 
-    def message_dm(self, tweet, output):
+    def message_dm(self, tweet):
         if '#dm' in tweet.text.lower():
-            output.write(str(datetime.datetime.now()) + " DM reply !\n")
+            self.output.write(str(datetime.datetime.now()) + " DM reply !\n")
             message = read_and_set('../txt/citations_life.txt')
             message += "\nby : me :)"
             self.api.send_direct_message(tweet.user.id, message)
 
-    def show_help(self, tweet, output):
+    def show_help(self, tweet):
         if '#help' in tweet.text.lower():
-            output.write(str(datetime.datetime.now()) + " help reply !\n")
+            self.output.write(str(datetime.datetime.now()) + " help reply !\n")
             message = ""
             with open("../txt/help.txt", encoding='utf-8') as f:
                 message = f.read()
@@ -80,9 +85,9 @@ class Twitter_bot:
             response = "@" + tweet.user.screen_name + " Check your DM now ! :D"
             self.api.update_status(status=response, in_reply_to_status_id=tweet.id)
 
-    def get_meteo(self, tweet, output):
+    def get_meteo(self, tweet):
         if '#meteo' in tweet.text.lower():
-            output.write(str(datetime.datetime.now()) + " meteo reply\n")
+            self.output.write(str(datetime.datetime.now()) + " meteo reply\n")
             ville = get_city(tweet.text)
             if ville == "84":
                 self.api.update_status(status="@" + tweet.user.screen_name + " Je ne connais pas cette ville :(\n Vous êtes sûr de l'orthographe ?", in_reply_to_status_id=tweet.id)
@@ -102,10 +107,9 @@ class Twitter_bot:
             message += "\nConditions climatiques : " +  Translator().translate(str(temps), dest='fr').text
             self.api.update_status(status="@" + tweet.user.screen_name + " " + message, in_reply_to_status_id=tweet.id)
 
-    def get_trends_and_retweets(self, dt_now, output):
-        if dt_now.strftime("%H:%M:%S") >= "09:00:00" and dt_now.strftime("%H:%M:%S") <= "22:00:00" and dt_now.strftime("%M") == "31" and dt_now.strftime("%S") >= "00" and dt_now.strftime("%S") <= "14":
+    def get_trends_and_retweets(self):
+        if self.dt_now.strftime("%H:%M:%S") >= "09:00:00" and self.dt_now.strftime("%H:%M:%S") <= "22:00:00" and self.dt_now.strftime("%M") == "31" and self.dt_now.strftime("%S") >= "00" and self.dt_now.strftime("%S") < "14":
             r = random.randint(0, 1)
-            print(r)
             if r == 0:
                 choices = []
                 trends = self.api.get_place_trends(580778)
@@ -113,35 +117,34 @@ class Twitter_bot:
                     choices.append(trends[0]['trends'][i]['name'])
                 trend = random.choice(choices)
                 new = self.api.search_tweets(q=trend, count=1)
-                output.write(str(datetime.datetime.now()) + " trends and retweets with this trend : " + str(trend) + "\n")
+                self.output.write(str(datetime.datetime.now()) + " trends and retweets with this trend : " + str(trend) + "\n")
                 for tweet in new:
                     self.api.retweet(tweet.id)
         else:
             pass
 
-    def reply(self, output):
+    def reply(self):
         num_tweet = 0
         tweets = self.api.mentions_timeline(count=10)
         with open("../txt/last_seen.txt", "r") as f:
             content = f.readlines()
         tmp = open("../txt/tmp.txt", "a")
         time.sleep(13)
-        if str(datetime.datetime.now().strftime("%M")) == "00" and (int(datetime.datetime.now().strftime("%S")) >= 00 and int(datetime.datetime.now().strftime("%S")) <= 14):
-            output.write(25*"=" + " " + str(datetime.datetime.now()) + " " + 25*"=" + "\n")
+        if str(datetime.datetime.now().strftime("%M")) == "00" and (int(datetime.datetime.now().strftime("%S")) >= 00 and int(datetime.datetime.now().strftime("%S")) < 14):
+            self.output.write(25*"=" + " " + str(datetime.datetime.now()) + " " + 25*"=" + "\n")
         for tweet in (tweets):
             id = read_last_id(num_tweet)
             if str(tweet.id) + "\n" in content:
                 store_last_id(tweet.id, tmp)
             elif (id != str(tweet.id)):
-                output.write(str(datetime.datetime.now()) + " new tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
-                self.message_dm(tweet, output)
-                self.get_meteo(tweet, output)
-                self.anime(tweet, output)
-                self.show_help(tweet, output)
-                self.coiffeur(tweet, output)
+                self.output.write(str(datetime.datetime.now()) + " new tweet : " + tweet.text + " by : " + tweet.user.screen_name + "\n")
+                self.message_dm(tweet)
+                self.get_meteo(tweet)
+                self.anime(tweet)
+                self.show_help(tweet)
+                self.coiffeur(tweet)
                 try:
                     self.api.create_favorite(tweet.id)
-                    print("liked")
                 except Exception as e:
                     pass
                 store_last_id(tweet.id, tmp)
