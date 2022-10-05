@@ -49,6 +49,7 @@ while True:
         bot.output.close()
         exit(0)
     except tp.errors.TweepyException:
+        bot.output.write(str(bot.dt_now) + " Tweepy error : " + str(tp.errors.TweepyException) + "\n")
         bot.status = "offline"
         bot.output.write("Connection closed, bot status :" + bot.status + "\n")
         bot.output.close()

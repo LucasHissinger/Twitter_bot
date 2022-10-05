@@ -109,17 +109,17 @@ class Twitter_bot:
 
     def get_trends_and_retweets(self):
         if self.dt_now.strftime("%H:%M:%S") >= "09:00:00" and self.dt_now.strftime("%H:%M:%S") <= "22:00:00" and self.dt_now.strftime("%M") == "31" and self.dt_now.strftime("%S") >= "00" and self.dt_now.strftime("%S") < "14":
-            r = random.randint(0, 1)
-            if r == 0:
-                choices = []
-                trends = self.api.get_place_trends(580778)
-                for i in range(15):
-                    choices.append(trends[0]['trends'][i]['name'])
-                trend = random.choice(choices)
-                new = self.api.search_tweets(q=trend, count=1)
-                self.output.write(str(datetime.datetime.now()) + " trends and retweets with this trend : " + str(trend) + "\n")
-                for tweet in new:
-                    self.api.retweet(tweet.id)
+                try :
+                    choices = ["Anime", "Jeux vidéos", "League of Legends", "Series", "Information", "crypto", "Informatique", "Twitch", "Gaming", "Films", "Genshin Impact",
+                                "Overwatch"]
+                    trend = choice(choices)
+                    new = self.api.search_tweets(q=trend, count=1, result_type='popular')
+                    self.output.write(str(datetime.datetime.now()) + " trends and retweets with this trend : " + str(trend) + "\n")
+                    for tweet in new:
+                        self.api.retweet(tweet.id)
+                except Exception as e:
+                    self.output.write(str(datetime.datetime.now()) + " already retweet\n")
+                    pass
         else:
             pass
 
