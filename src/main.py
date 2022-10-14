@@ -5,15 +5,15 @@
 ## main
 ##
 
+import os
+print("pass")
+os.system("sh setup.sh")
+
 import tweepy as tp
-import os
-import os
 import time
 import datetime
 from dotenv import load_dotenv
 from methods import *
-
-os.system("sh setup.sh")
 
 load_dotenv()
 
