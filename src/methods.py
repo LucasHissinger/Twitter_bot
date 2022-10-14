@@ -19,6 +19,10 @@ import wget
 from googletrans import Translator
 import datetime
 
+random_minute_retweet = 31
+random_minute_tweet = 30
+
+
 class Twitter_bot:
 
     global output
@@ -32,7 +36,10 @@ class Twitter_bot:
         return f"Twitter_bot({self.api}) and status : {self.status}"
 
     def tweet(self):
-        if self.dt_now.strftime("%H:%M:%S") >= "15:30:00" and self.dt_now.strftime("%H:%M:%S") <= "15:30:14":
+        global random_minute_tweet
+        random_minute_tweet = random_min(self.dt_now, random_minute_tweet)
+        print("random minute tweet : " + str(random_minute_tweet))
+        if self.dt_now.strftime("%H") == "15" and int(self.dt_now.strftime("%M")) == random_minute_tweet and self.dt_now.strftime("%S") >= "00" and self.dt_now.strftime("%S") < "14":
             self.output.write(str(datetime.datetime.now()) + " TWEET!\n")
             create_img()
             media = self.api.media_upload("final_img.png")
@@ -70,7 +77,7 @@ class Twitter_bot:
     def message_dm(self, tweet):
         if '#dm' in tweet.text.lower():
             self.output.write(str(datetime.datetime.now()) + " DM reply !\n")
-            message = read_and_set('../txt/citations_life.txt')
+            message = read_and_set('txt/citations_life.txt')
             message += "\nby : me :)"
             self.api.send_direct_message(tweet.user.id, message)
 
@@ -78,7 +85,7 @@ class Twitter_bot:
         if '#help' in tweet.text.lower():
             self.output.write(str(datetime.datetime.now()) + " help reply !\n")
             message = ""
-            with open("../txt/help.txt", encoding='utf-8') as f:
+            with open("txt/help.txt", encoding='utf-8') as f:
                 message = f.read()
             f.close()
             self.api.send_direct_message(tweet.user.id, message)
@@ -108,27 +115,31 @@ class Twitter_bot:
             self.api.update_status(status="@" + tweet.user.screen_name + " " + message, in_reply_to_status_id=tweet.id)
 
     def get_trends_and_retweets(self):
-        if self.dt_now.strftime("%H:%M:%S") >= "09:00:00" and self.dt_now.strftime("%H:%M:%S") <= "22:00:00" and self.dt_now.strftime("%M") == "31" and self.dt_now.strftime("%S") >= "00" and self.dt_now.strftime("%S") < "14":
-                try :
-                    choices = ["Anime", "Jeux vidéos", "League of Legends", "Series", "Information", "crypto", "Informatique", "Twitch", "Gaming", "Films", "Genshin Impact",
-                                "Overwatch"]
-                    trend = choice(choices)
-                    new = self.api.search_tweets(q=trend, count=1, result_type='popular')
-                    self.output.write(str(datetime.datetime.now()) + " trends and retweets with this trend : " + str(trend) + "\n")
-                    for tweet in new:
-                        self.api.retweet(tweet.id)
-                except Exception as e:
-                    self.output.write(str(datetime.datetime.now()) + " already retweet\n")
-                    pass
+        global random_minute_retweet
+        random_minute_retweet = random_min(self.dt_now, random_minute_retweet)
+        print("random minute : " + str(random_minute_retweet))
+        if self.dt_now.strftime("%H:%M:%S") >= "09:00:00" and self.dt_now.strftime("%H:%M:%S") <= "22:00:00" and int(self.dt_now.strftime("%M")) == random_minute_retweet and self.dt_now.strftime("%S") >= "00" and self.dt_now.strftime("%S") < "14":
+                if (random.randint(0, 1) == 1):
+                    try :
+                        choices = ["Anime", "Jeux vidéos", "League of Legends", "Series", "Information", "crypto", "Informatique", "Twitch", "Gaming", "Films", "Genshin Impact",
+                                    "Overwatch", "Wankil", "Youtube", "Amixem", "Cats"]
+                        trend = choice(choices)
+                        new = self.api.search_tweets(q=trend, count=1, result_type='popular')
+                        self.output.write(str(datetime.datetime.now()) + " trends and retweets with this trend : " + str(trend) + "\n")
+                        for tweet in new:
+                            self.api.retweet(tweet.id)
+                    except Exception as e:
+                        self.output.write(str(datetime.datetime.now()) + " already retweet\n")
+                        pass
         else:
             pass
 
     def reply(self):
         num_tweet = 0
         tweets = self.api.mentions_timeline(count=10)
-        with open("../txt/last_seen.txt", "r") as f:
+        with open("txt/last_seen.txt", "r") as f:
             content = f.readlines()
-        tmp = open("../txt/tmp.txt", "a")
+        tmp = open("txt/tmp.txt", "a")
         time.sleep(13)
         if str(datetime.datetime.now().strftime("%M")) == "00" and (int(datetime.datetime.now().strftime("%S")) >= 00 and int(datetime.datetime.now().strftime("%S")) < 14):
             self.output.write(25*"=" + " " + str(datetime.datetime.now()) + " " + 25*"=" + "\n")
@@ -150,5 +161,5 @@ class Twitter_bot:
                 store_last_id(tweet.id, tmp)
             num_tweet += 1
         tmp.close()
-        os.remove("../txt/last_seen.txt")
-        os.rename("../txt/tmp.txt", "../txt/last_seen.txt")
+        os.remove("txt/last_seen.txt")
+        os.rename("txt/tmp.txt", "txt/last_seen.txt")

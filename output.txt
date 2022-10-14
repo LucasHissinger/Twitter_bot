@@ -1,0 +1,5 @@
+2022-10-14 15:24:47.204413 Starting bot...
+2022-10-14 15:24:48.206692 CONNECTED
+Bot status : online
+2022-10-14 15:30:00.700765 TWEET!
+exiting safe

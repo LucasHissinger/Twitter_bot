@@ -12,7 +12,7 @@ import csv
 
 def get_anime(title):
 
-    file = open("../txt/animes.csv", "r", encoding="utf-8")
+    file = open("txt/animes.csv", "r", encoding="utf-8")
     data = csv.reader(file, delimiter=',')
     names = []
     for row in data:

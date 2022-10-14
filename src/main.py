@@ -7,10 +7,13 @@
 
 import tweepy as tp
 import os
+import os
 import time
 import datetime
 from dotenv import load_dotenv
 from methods import *
+
+os.system("sh setup.sh")
 
 load_dotenv()
 
@@ -31,6 +34,7 @@ output.write(str(datetime.datetime.now()) + " CONNECTED\n")
 bot = Twitter_bot(api, "online")
 output.write("Bot status : " + bot.status + "\n")
 output.close()
+print("LAUNCHING BOT...")
 
 while True:
     bot.status = "online"

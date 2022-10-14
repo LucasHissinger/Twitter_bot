@@ -1,5 +1,7 @@
-selenium==4.4.3
-googlesearch-python==1.1.0
-pillow==9.0.1
-tweepy==4.10.0
-wget==3.2
+selenium
+googlesearch-python
+pillow
+tweepy
+wget
+python-dotenv
+googletrans
