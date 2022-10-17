@@ -11,9 +11,9 @@ import random
 def random_min(now, minutes):
     if now.strftime("%M") == "00" and now.strftime("%S") > "00" and now.strftime("%S") <= "14":
         random_min = random.randint(0, 59)
-        if random_min != 30:
+        if random_min != 30 or random_min != 0:
             return random_min
-        else:
+        elif random_min == 0 or random_min == 30:
             return random_min + 1
     else:
         return minutes
