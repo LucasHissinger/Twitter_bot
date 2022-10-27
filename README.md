@@ -7,13 +7,11 @@ It's just a simple twitter bot that has a few features.
     $ cd Twitter_bot
     $ pip install -r requirements.txt
 
-    or download the zip file
-
     Next, download this chromedriver.exe and put it in the root of the repo
 
 # chromedriver : https://chromedriver.chromium.org/downloads
 
 # comment lancer le programme ?
+Il faut lancer le programme avec une console linux (ubuntu, fedora ou kali peu importe) pour que le programme puisse lancer le script "setup.sh" pour installer les dépendances
 
-    $ cd src
     $ python3 main.py
