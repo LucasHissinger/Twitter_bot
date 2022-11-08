@@ -37,7 +37,7 @@ class Twitter_bot:
         global random_minute_tweet
         random_minute_tweet = random_min(self.dt_now, random_minute_tweet)
         print("random minute tweet : " + str(random_minute_tweet))
-        if self.dt_now.strftime("%H") == "09" and self.dt_now.strftime("%M") == random_minute_tweet and self.dt_now.strftime("%S") > "00" and self.dt_now.strftime("%S") < "14":
+        if self.dt_now.strftime("%H") == "16" and self.dt_now.strftime("%M") == "25" and self.dt_now.strftime("%S") > "00" and self.dt_now.strftime("%S") < "14":
             self.get_meteo("#meteo " + random.choice(get_cities("FR", 150000)), 0, "Nobody", False)
         if self.dt_now.strftime("%H") == "15" and int(self.dt_now.strftime("%M")) == random_minute_tweet and self.dt_now.strftime("%S") >= "00" and self.dt_now.strftime("%S") < "14":
             self.output.write(str(datetime.datetime.now()) + " TWEET!\n")
@@ -107,12 +107,12 @@ class Twitter_bot:
             url_weather = os.getenv('URL_METEO') + ville + os.getenv('API_METEO')
             r_weather = requests.get(url_weather)
             data = r_weather.json()
-            message = "Vous etes a " + ville
+            message = "Vous etes a " + ville if is_reply == True else "Aujourd'hui a " + ville
             t = data['main']['temp']
-            message += "\nLa temperature moyenne est de " + str(round(t - 273.15, 2)) + " degres Celsius"
+            message += "\nLa temperature moyenne est de " + str(round(t - 273.15, 2)) + " degres"
             t_min = data['main']['temp_min']
             t_max = data['main']['temp_max']
-            message += "\nLes temperatures varient entre " + str(round(t_min - 273.15, 2)) + " et " + str(round(t_max - 273.15, 2)) + " degres Celsius"
+            message += "\nLes temperatures varient entre " + str(round(t_min - 273.15, 2)) + " et " + str(round(t_max - 273.15, 2)) + " degres" if is_reply == True else ""
             humidite = data['main']['humidity']
             message += "\nLe taux d'humidite est de " + str(humidite) + "%"
             condition = data['weather'][0]['description']
@@ -122,7 +122,9 @@ class Twitter_bot:
             elif is_reply == False:
                 self.output.write(str(datetime.datetime.now()) + " daily post meteo morning\n")
                 response = make_reponse(t, humidite)
-                final = message + "\n\n" + response
+                final = message + "\n" + response
+                print(len(final))
+                print(final)
                 self.api.update_status(status=final)
 
     def get_trends_and_retweets(self):

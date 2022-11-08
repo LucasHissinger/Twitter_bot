@@ -1,4 +1,0 @@
-2022-10-27 12:46:03.034312 Starting bot...
-2022-10-27 12:46:04.035886 CONNECTED
-Bot status : online
-exiting safe
