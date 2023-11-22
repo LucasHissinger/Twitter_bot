@@ -1,39 +1,79 @@
-# `TWITTER_BOT`
 
-It's just a simple twitter bot that has a few features.
-* https://twitter.com/WonderfullBot
+# Twitter Bot
 
-### Comment installer les dépendances ?
-```
-git clone https://github.com/LucasHissinger/Twitter_bot.git
-cd Twitter_bot
-pip install -r requirements.txt
-```
+A Twitter bot with some features
 
-### Mise en place
-Next, download chromedriver.exe and put it in the root of the repo
 
-* chromedriver: https://chromedriver.chromium.org/downloads
-Don't forget to add it to the PATH
+## Features
 
-Create a .env file and fill it like this:
+- like and reply to your response to him
+- retweet tweets
+- get meteo of country in tweets if you tag him with "#meteo"
+- get anime synopsis if you tag him with "#anime"
+- send dm message with citation if you tag him with "#dm"
+- randomly tweet a "cringe" photos one time per day
 
-```
-CONSUMER_KEY=consumer_key
-CONSUMER_SECRET=consumer_secret
-ACCESS_TOKEN=access_token
-ACCESS_SECRET=access_secret
-URL_METEO=http://api.openweathermap.org/data/2.5/weather?q=
-API_METEO =api_meteo_from_
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/LucasHissinger/Twitter_bot.git
 ```
 
-link to help with this
-* https://openweathermap.org/appid
-* https://developer.twitter.com/en/docs/authentication/oauth-1-0a/obtaining-user-access-tokens
+Go to the project directory
+
+```bash
+  cd Twitter_bot
+```
+
+Install dependencies
+
+```bash
+  pip3 install -r requirement.txt
+```
+
+Install and add chromedriver
+```bash
+download binary at https://chromedriver.chromium.org/downloads
+put the binary at the root of the repo
+put it in your PATH
+```
+
+run the bot
+
+```bash
+  python3 src/main.py
+```
 
 
+## Environment Variables
 
-# comment lancer le programme ?
-Il faut lancer le programme avec une console linux (ubuntu, fedora ou kali peu importe) pour que le programme puisse lancer le script "setup.sh" pour installer les dépendances
+To run this project, you will need to add the following environment variables to your .env file
 
-    $ python3 src/main.py
+`CONSUMER_KEY`
+
+`CONSUMER_SECRET`
+
+`ACCESS_TOKEN`
+
+`ACCESS_SECRET`
+
+`URL_METEO=http://api.openweathermap.org/data/2.5/weather?q=`
+
+`API_METEO`
+
+
+## Feedback
+
+If you have any feedback, please reach out to me at lucas.hissinger@epitech.eu
+
+
+## Documentation
+Some usefull links :
+
+[Twitter Secret](https://developer.twitter.com/en/docs/authentication/oauth-1-0a/obtaining-user-access-tokens)
+
+[Api creds](https://openweathermap.org/appid)
+
